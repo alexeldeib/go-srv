@@ -8,16 +8,18 @@ the same cluster as the server, or as a remote client on any machine.
 When both pods run in the cluster, they run on separate machines with no
 resource limits.
 
-For Azure nodes we use Standard_D16s_v3 with 16 vCPU / 64 GB RAM / 1TB OS disk (P30 disk).
+For Azure nodes we use Standard_D16s_v3 with 16 vCPU / 64 GB RAM / 1TB
+OS disk (P30 disk).
 
-The results for the Windows PC come from a machinewith the following specifications:
+The results for the Windows PC come from a machine with the following
+specifications:
 
 - AMD Ryzen Threadripper 3970x (32 core, 3.70 GHz)
 - 64 GB RAM
 - 1TB Samsung 970 EVO plus M.2 SSD
 
-The Digital Ocean droplet used as a remote client is the general
-purpose, 16 CPU / 64GB RAM / 1TB disk. It's comparable to the Windows PC
+The Digital Ocean droplet used as a remote client is a general purpose,
+16 CPU / 64GB RAM / 1TB disk instance. It's comparable to the Windows PC
 in hardware.
 
 Throughput/latency are measured by the following command:
