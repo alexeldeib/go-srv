@@ -3,13 +3,13 @@
 This is a sample load test of simple http client and server.
 
 The server always runs in AKS. The client either runs as an AKS pod in
-the same cluster as the server, or as a local client on any machine.
+the same cluster as the server, or as a remote client on any machine.
 
 When both pods run in the cluster, they are run on separate machines.
 
 For Azure nodes we use Standard_D16s_v3 with 16 vCPU / 64 GB RAM / 1TB OS disk (P30 disk).
 
-The results for the local client here are from a Windows PC with the
+The results for the remote client here are from a Windows PC with the
 following specifications:
 
 - AMD Ryzen Threadripper 3970x (32 core, 3.70 GHz)
@@ -32,7 +32,7 @@ bombardier -c 125 -n 100000 http://LOAD_BALANCER_PUBLIC_IP
 | ---------------- | ------ | ----------------- |
 | remote - windows |   1640 |   1.92            |
 | remote - linux   |   3540 |   4.14            |
-| local  - pod     | 249194 | 298.50            |
+| in cluster - pod | 249194 | 298.50            |
 
 
 ## Windows remote client:
@@ -65,7 +65,7 @@ Statistics        Avg      Stdev        Max
   Throughput:     4.14MB/s
 ```
 
-## Pod-based client:
+## In-cluster pod client:
 ```pwsh
 PS C:\Users\alexe\code\go-srv> kubectl logs client-564c879b47-4szvp
 Bombarding http://40.119.56.195:8080/ok with 100000 request(s) using 125 connection(s)
