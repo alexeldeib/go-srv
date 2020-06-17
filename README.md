@@ -94,7 +94,7 @@ Statistics        Avg      Stdev        Max
 ## In-cluster pod client:
 ```pwsh
 PS C:\Users\alexe\code\go-srv> kubectl logs client-857695d5fb-4fbv2
-Bombarding http://40.119.56.195:8080/ok with 100000 request(s) using 125 connection(s)
+Bombarding http://40.119.56.195:8080 with 100000 request(s) using 125 connection(s)
  100000 / 100000  100.00% 249567/s 0s
 Done!
 Statistics        Avg      Stdev        Max
