@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &name http
+  labels:
+    app: *name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: *name
+  template:
+    metadata:
+      labels:
+        app: *name
+    spec:
+      # nodeSelector:
+      #   node-role.kubernetes.io/master: ''
+      # tolerations:
+      #   - key: "node-role.kubernetes.io/master"
+      #     operator: "Exists"
+      #
+      # # above OR below needed ONLY, not both
+      # #
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #       - matchExpressions:
+      #         - key: node-role.kubernetes.io/master
+      #           operator: Exists
+      hostname: aks-nodepool1-42500205-vmss000005
+      hostNetwork: true
+      hostPID: true
+      containers:
+        - image: alexeldeib/go-srv@sha256:fedf69921474410b54d5fc3ac8bd8c2b85da4842eaaa401eb9cba909fd86e020
+          name: server
+          resources:
+            {}
+            # requests:
+            #   cpu: 100m
+            #   memory: 100Mi
+            # limits:
+            #   cpu: 100m
+            #   memory: 100Mi
+          # securityContext:
+          #   privileged: true
+          #   capabilities:
+          #     add: ["SYS_PTRACE", "SYS_RAWIO"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: &name http
+  labels:
+    app: *name
+spec:
+  type: LoadBalancer
+  ports:
+    - name: *name
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: *name
+---
+

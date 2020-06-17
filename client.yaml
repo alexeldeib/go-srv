@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &name client
+  labels:
+    app: *name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: *name
+  template:
+    metadata:
+      labels:
+        app: *name
+    spec:
+      # nodeSelector:
+      #   node-role.kubernetes.io/master: ''
+      # tolerations:
+      #   - key: "node-role.kubernetes.io/master"
+      #     operator: "Exists"
+      #
+      # # above OR below needed ONLY, not both
+      # #
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #       - matchExpressions:
+      #         - key: node-role.kubernetes.io/master
+      #           operator: Exists
+      hostname: aks-nodepool1-42500205-vmss000004
+      hostNetwork: true
+      hostPID: true
+      containers:
+        - image: alexeldeib/go-client@sha256:79ca6af0b27a28966dde1dac9c4abe30d1e9814b4305fbe389c03cc247c300a3
+          name: client
+          command: ["/bin/bombardier"]
+          args:
+            - -c
+            - "125"
+            - -n
+            - "100000"
+            - "http://40.119.56.195:8080/ok"
+          resources:
+            {}
+            # requests:
+            #   cpu: 100m
+            #   memory: 100Mi
+            # limits:
+            #   cpu: 100m
+            #   memory: 100Mi
+          # securityContext:
+          #   privileged: true
+          #   capabilities:
+          #     add: ["SYS_PTRACE", "SYS_RAWIO"]
