@@ -22,7 +22,12 @@ in hardware.
 
 Throughput/latency are measured by the following command:
 
-## Setup
+```bash
+# same in local/remote client
+bombardier -c 125 -n 100000 http://LOAD_BALANCER_PUBLIC_IP
+```
+
+## AKS Configuration
 
 The basic setup is in test.sh. This is not the actual script I used, but
 a rough log of commands with 95% of what you would need to reproduce.
@@ -46,11 +51,6 @@ az aks create \
     --network-plugin azure \
     --enable-vmss \
     --load-balancer-sku standard
-```
-
-```bash
-# same in local/remote client
-bombardier -c 125 -n 100000 http://LOAD_BALANCER_PUBLIC_IP
 ```
 
 ## Results
