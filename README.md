@@ -22,6 +22,32 @@ in hardware.
 
 Throughput/latency are measured by the following command:
 
+## Setup
+
+The basic setup is in test.sh. This is not the actual script I used, but
+a rough log of commands with 95% of what you would need to reproduce.
+Importantly, it contains all details to configure an identical AKS
+cluster. The main features for testing here are:
+
+- Standard load balancer
+- 1 TB OS disk to avoid disk throttling
+- 16 vCPU / 64GB RAM to avoid CPU/RAM bottlenecks
+- 3 nodes, so we can schedule the client and server separately
+
+```bash
+az aks create \
+    -g ${NAME} \
+    -n ${NAME} \
+    -l "${LOCATION}"  \
+    --node-count 3 \
+    --node-vm-size Standard_D16s_v3 \
+    --node-osdisk-size 1023 \
+    -k 1.17.3 \
+    --network-plugin azure \
+    --enable-vmss \
+    --load-balancer-sku standard
+```
+
 ```bash
 # same in local/remote client
 bombardier -c 125 -n 100000 http://LOAD_BALANCER_PUBLIC_IP
@@ -32,7 +58,7 @@ bombardier -c 125 -n 100000 http://LOAD_BALANCER_PUBLIC_IP
 | ---------------- | ------ | ----------------- |
 | remote - windows |   1640 |   1.92            |
 | remote - linux   |   3540 |   4.14            |
-| in cluster - pod | 249194 | 298.50            |
+| in cluster - pod | 249567 | 326.05            |
 
 
 ## Windows remote client:
@@ -67,15 +93,15 @@ Statistics        Avg      Stdev        Max
 
 ## In-cluster pod client:
 ```pwsh
-PS C:\Users\alexe\code\go-srv> kubectl logs client-564c879b47-4szvp
+PS C:\Users\alexe\code\go-srv> kubectl logs client-857695d5fb-4fbv2
 Bombarding http://40.119.56.195:8080/ok with 100000 request(s) using 125 connection(s)
- 100000 / 100000  100.00% 249194/s 0s
+ 100000 / 100000  100.00% 249567/s 0s
 Done!
 Statistics        Avg      Stdev        Max
-  Reqs/sec    289024.71   72320.61  324559.16
-  Latency      457.19us     1.42ms    67.28ms
+  Reqs/sec    296992.99   74987.42  340537.90
+  Latency      426.45us     0.91ms    45.58ms
   HTTP codes:
     1xx - 0, 2xx - 100000, 3xx - 0, 4xx - 0, 5xx - 0
     others - 0
-  Throughput:   298.50MB/s
+  Throughput:   326.05MB/s
 ```

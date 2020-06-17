@@ -15,7 +15,17 @@ if [ -z "${NAME}" ]; then
 fi
 
 az group create -l "${LOCATION}" -n ${NAME}
-az aks create -g ${NAME} -n ${NAME} -l "${LOCATION}" --node-vm-size Standard_D16s_v3 --node-osdisk-size 1023 -k 1.17.3 --network-plugin azure --enable-vmss --load-balancer-sku standard
+az aks create \
+    -g ${NAME} \
+    -n ${NAME} \
+    -l "${LOCATION}"  \
+    --node-count 3 \
+    --node-vm-size Standard_D16s_v3 \
+    --node-osdisk-size 1023 \
+    -k 1.17.3 \
+    --network-plugin azure \
+    --enable-vmss \
+    --load-balancer-sku standard
 
 # expose server on :8080
 kubectl apply -f server.yaml
