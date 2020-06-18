@@ -29,7 +29,7 @@ spec:
       #       - matchExpressions:
       #         - key: node-role.kubernetes.io/master
       #           operator: Exists
-      nodeName: aks-nodepool1-24428443-vmss000000
+      # nodeName: aks-nodepool1-24428443-vmss000000
       hostNetwork: true
       hostPID: true
       containers:

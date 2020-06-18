@@ -22,6 +22,8 @@ The Digital Ocean droplet used as a remote client is a general purpose,
 16 CPU / 64GB RAM / 1TB disk instance. It's comparable to the Windows PC
 in hardware.
 
+External AKS client clusters have the same configuration as the server cluster.
+
 Throughput/latency are measured by the following command:
 
 ```bash
@@ -106,4 +108,19 @@ Statistics        Avg      Stdev        Max
     1xx - 0, 2xx - 100000, 3xx - 0, 4xx - 0, 5xx - 0
     others - 0
   Throughput:   326.05MB/s
+```
+
+## Different AKS cluster, same region:
+```bash
+ace@ace-vm:~/code/go-srv$ kubectl logs client-6858999d56-d67dx
+Bombarding http://40.119.56.195:8080 with 100000 request(s) using 125 connection(s)
+ 100000 / 100000  100.00% 249422/s 0s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec    282414.47   73553.18  324683.42
+  Latency      458.46us     1.22ms    53.65ms
+  HTTP codes:
+    1xx - 0, 2xx - 100000, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 0
+  Throughput:   305.86MB/s
 ```
