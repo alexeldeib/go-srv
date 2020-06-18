@@ -1,5 +1,14 @@
 # http load test on AKS
 
+## WARNING
+
+The below setup attempts to eliminate most constraints to make the comparison as fair as possible between clients in various destinations. Besides CPU, RAM, and other common resources, one common issue with clients on AKS is port exhaustion. This setup avoids that problem by managing port re-use. If your scenario requires large numbers of port allocations, be aware of **SNAT exhaustion** and how outbound connections, particularly from VMSS behind a load balancer, work on Azure.
+
+https://docs.microsoft.com/en-us/azure/load-balancer/troubleshoot-outbound-connection#snatexhaust
+https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-outbound-connections#lb
+
+## Setup
+
 This is a sample load test of simple http client and server.
 
 The server always runs in AKS. The client either runs as an AKS pod in
@@ -60,11 +69,11 @@ az aks create \
 ## Results
 |       client     | rps    | throughput (MB/s) | 
 | ---------------- | ------ | ----------------- |
-| remote - windows |   1640 |   1.92            |
-| remote - linux   |   3540 |   4.14            |
-| wus2   - pod     |   2887 |   3.39            |   
-| scus   - pod     | 249422 | 305.86            |
-| in cluster - pod | 249567 | 326.05            |
+| windows desktop |   1640 |   1.92            |
+| digital ocean droplet |   3540 |   4.14            |
+| Pod in AKS cluster in different Azure region |   2887 |   3.39            |   
+| Pod in AKS cluster in same Azure region | 249422 | 305.86            |
+| Pod in same AKS cluster, different host | 249567 | 326.05            |
 
 ## Windows remote client:
 ```pwsh
