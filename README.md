@@ -62,8 +62,9 @@ az aks create \
 | ---------------- | ------ | ----------------- |
 | remote - windows |   1640 |   1.92            |
 | remote - linux   |   3540 |   4.14            |
+| wus2   - pod     |   2887 |   3.39            |   
+| scus   - pod     | 249422 | 305.86            |
 | in cluster - pod | 249567 | 326.05            |
-
 
 ## Windows remote client:
 ```pwsh
@@ -95,6 +96,35 @@ Statistics        Avg      Stdev        Max
   Throughput:     4.14MB/s
 ```
 
+## AKS cluster, same region:
+```bash
+Bombarding http://40.119.56.195:8080 with 100000 request(s) using 125 connection(s)
+ 100000 / 100000  100.00% 2887/s 34s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec      2902.67     520.17    5393.81
+  Latency       43.06ms     1.95ms   141.08ms
+  HTTP codes:
+    1xx - 0, 2xx - 100000, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 0
+  Throughput:     3.39MB/s
+```
+
+## AKS cluster, same region:
+```bash
+ace@ace-vm:~/code/go-srv$ kubectl logs client-6858999d56-d67dx
+Bombarding http://40.119.56.195:8080 with 100000 request(s) using 125 connection(s)
+ 100000 / 100000  100.00% 249422/s 0s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec    282414.47   73553.18  324683.42
+  Latency      458.46us     1.22ms    53.65ms
+  HTTP codes:
+    1xx - 0, 2xx - 100000, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 0
+  Throughput:   305.86MB/s
+```
+
 ## In-cluster pod client:
 ```pwsh
 PS C:\Users\alexe\code\go-srv> kubectl logs client-857695d5fb-4fbv2
@@ -108,19 +138,4 @@ Statistics        Avg      Stdev        Max
     1xx - 0, 2xx - 100000, 3xx - 0, 4xx - 0, 5xx - 0
     others - 0
   Throughput:   326.05MB/s
-```
-
-## Different AKS cluster, same region:
-```bash
-ace@ace-vm:~/code/go-srv$ kubectl logs client-6858999d56-d67dx
-Bombarding http://40.119.56.195:8080 with 100000 request(s) using 125 connection(s)
- 100000 / 100000  100.00% 249422/s 0s
-Done!
-Statistics        Avg      Stdev        Max
-  Reqs/sec    282414.47   73553.18  324683.42
-  Latency      458.46us     1.22ms    53.65ms
-  HTTP codes:
-    1xx - 0, 2xx - 100000, 3xx - 0, 4xx - 0, 5xx - 0
-    others - 0
-  Throughput:   305.86MB/s
 ```
